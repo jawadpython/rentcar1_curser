@@ -53,41 +53,96 @@ const AdminBookings = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto mt-10 p-6">
-      <h1 className="text-2xl font-bold mb-4">Gestion des réservations</h1>
-      <div className="flex flex-col md:flex-row md:items-end gap-4 mb-6">
-        <div className="flex flex-col">
+    <div className="max-w-6xl mx-auto mt-6 p-2 sm:p-4 md:p-6">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4 text-center">Gestion des réservations</h1>
+      <div className="flex flex-col gap-3 sm:gap-4 md:flex-row md:items-end mb-6">
+        <div className="flex flex-col w-full md:w-auto">
           <label className="text-sm font-medium mb-1">Recherche (ville, voiture, client)</label>
           <input
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400"
+            className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 w-full"
             placeholder="Rechercher..."
           />
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full md:w-auto">
           <label className="text-sm font-medium mb-1">Date de début</label>
           <input
             type="date"
             value={dateFrom}
             onChange={e => setDateFrom(e.target.value)}
-            className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400"
+            className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 w-full"
           />
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full md:w-auto">
           <label className="text-sm font-medium mb-1">Date de fin</label>
           <input
             type="date"
             value={dateTo}
             onChange={e => setDateTo(e.target.value)}
-            className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400"
+            className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 w-full"
           />
         </div>
       </div>
-      <div className="mb-4 text-lg font-semibold text-teal-700">Recette totale : {totalRevenue.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</div>
-      <div className="overflow-x-auto rounded-lg shadow">
-        <table className="min-w-full bg-white">
+      <div className="mb-4 text-lg font-semibold text-teal-700 text-center md:text-left">Recette totale : {totalRevenue.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</div>
+      {/* Card layout for mobile, table for md+ */}
+      <div className="block md:hidden">
+        {filtered.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">Aucune réservation trouvée.</div>
+        ) : (
+          <div className="flex flex-col gap-4">
+            {filtered.map((b, idx) => (
+              <div key={idx} className="bg-white rounded-lg shadow p-4 flex flex-col gap-2">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-semibold text-lg">{b.city?.name || b.city}</span>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleShowDetails(b)}
+                      className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
+                      aria-label={`Détails de la réservation de ${b.city?.name || b.city}`}
+                    >
+                      Détails
+                    </button>
+                    <button
+                      onClick={() => handleDelete(bookings.indexOf(b))}
+                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm"
+                      aria-label={`Supprimer la réservation de ${b.city?.name || b.city}`}
+                    >
+                      Supprimer
+                    </button>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <img src={b.selectedCar?.image} alt={b.selectedCar?.name} className="w-16 h-10 object-cover rounded shadow" />
+                  <span className="font-medium">{b.selectedCar?.name}</span>
+                </div>
+                <div>
+                  <span className="font-medium">Client: </span>
+                  {b.userInfo ? (
+                    <span>{b.userInfo.firstName} {b.userInfo.lastName} <span className="text-gray-500">({b.userInfo.email})</span></span>
+                  ) : (
+                    <span className="text-gray-400">Non renseigné</span>
+                  )}
+                </div>
+                <div>
+                  <span className="font-medium">Contact: </span>
+                  {b.userInfo?.phone || <span className="text-gray-400">Non renseigné</span>}
+                </div>
+                <div>
+                  <span className="font-medium">Période: </span>
+                  {format(new Date(b.startDate), 'dd/MM/yyyy')} - {format(new Date(b.endDate), 'dd/MM/yyyy')}
+                </div>
+                <div>
+                  <span className="font-medium">Prix/jour: </span>{b.selectedCar?.price} €
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      <div className="overflow-x-auto rounded-lg shadow hidden md:block">
+        <table className="min-w-[700px] w-full bg-white text-sm md:text-base">
           <thead>
             <tr className="bg-gray-100 text-gray-700 text-left">
               <th className="py-3 px-4">Ville</th>
@@ -135,12 +190,14 @@ const AdminBookings = () => {
                       <button
                         onClick={() => handleShowDetails(b)}
                         className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors text-sm"
+                        aria-label={`Détails de la réservation de ${b.city?.name || b.city}`}
                       >
                         Détails
                       </button>
                       <button
                         onClick={() => handleDelete(bookings.indexOf(b))}
                         className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors text-sm"
+                        aria-label={`Supprimer la réservation de ${b.city?.name || b.city}`}
                       >
                         Supprimer
                       </button>
@@ -155,23 +212,24 @@ const AdminBookings = () => {
 
       {/* Modal for booking details */}
       {showModal && selectedBooking && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
           <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Détails de la réservation</h2>
+            <div className="p-4 sm:p-6">
+              <div className="flex justify-between items-center mb-4 sm:mb-6">
+                <h2 className="text-lg sm:text-2xl font-bold text-gray-900">Détails de la réservation</h2>
                 <button
                   onClick={handleCloseModal}
                   className="text-gray-400 hover:text-gray-600 text-2xl"
+                  aria-label="Fermer le détail de la réservation"
                 >
                   ×
                 </button>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {/* Booking Information */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Informations de réservation</h3>
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3">Informations de réservation</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700">ID de réservation</label>
