@@ -4,6 +4,7 @@ import { BookingProvider } from './context/BookingContext';
 import SelectCity from './pages/SelectCity';
 import SelectDate from './pages/SelectDate';
 import AvailableCars from './pages/AvailableCars';
+import UserInfo from './pages/UserInfo';
 import BookingConfirmation from './pages/BookingConfirmation';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminBookings from './pages/AdminBookings';
@@ -12,7 +13,9 @@ function Header() {
   const location = useLocation();
   let currentStep = 0;
   if (location.pathname.startsWith('/date')) currentStep = 2;
-  else if (location.pathname.startsWith('/cars') || location.pathname.startsWith('/confirmation')) currentStep = 3;
+  else if (location.pathname.startsWith('/cars')) currentStep = 3;
+  else if (location.pathname.startsWith('/user-info')) currentStep = 4;
+  else if (location.pathname.startsWith('/confirmation')) currentStep = 5;
   else if (location.pathname.startsWith('/station')) currentStep = 1;
   else currentStep = 1;
 
@@ -23,11 +26,11 @@ function Header() {
           <span className="text-2xl font-bold tracking-tight" style={{fontFamily: 'monospace'}}>T🟢sla</span>
         </div>
         <nav className="flex items-center gap-8">
-          {['Ville', 'Date', 'cars'].map((step, idx) => (
+          {['Ville', 'Date', 'Voiture', 'Infos', 'Confirmation'].map((step, idx) => (
             <div key={step} className="flex items-center gap-2">
               <span className={`rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold border-2 ${currentStep === idx+1 ? 'bg-teal-400 border-teal-400 text-black' : 'border-gray-500 text-gray-300 bg-[#23262b]'}`}>{idx+1}</span>
               <span className={`text-base font-medium ${currentStep === idx+1 ? 'text-teal-400' : 'text-gray-300'}`}>{step}</span>
-              {idx < 2 && <span className="w-6 h-0.5 bg-gray-600 mx-2 rounded-full" />}
+              {idx < 4 && <span className="w-6 h-0.5 bg-gray-600 mx-2 rounded-full" />}
             </div>
           ))}
         </nav>
@@ -63,6 +66,7 @@ const App = () => {
           <Route path="/" element={<SelectCity />} />
           <Route path="/date" element={<SelectDate />} />
           <Route path="/cars" element={<AvailableCars />} />
+          <Route path="/user-info" element={<UserInfo />} />
           <Route path="/confirmation" element={<BookingConfirmation />} />
           {/* Admin routes */}
           <Route path="/admin" element={<AdminLayout><AdminDashboard /></AdminLayout>} />

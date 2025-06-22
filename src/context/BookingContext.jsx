@@ -14,6 +14,10 @@ export const BookingProvider = ({ children }) => {
     setBookingData((prev) => ({ ...prev, ...data }));
   };
 
+  const getBookingData = () => {
+    return bookingData;
+  };
+
   const saveBooking = () => {
     const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
     bookings.push(bookingData);
@@ -25,7 +29,7 @@ export const BookingProvider = ({ children }) => {
   };
 
   return (
-    <BookingContext.Provider value={{ bookingData, updateBookingData, saveBooking, getBookings }}>
+    <BookingContext.Provider value={{ bookingData, updateBookingData, getBookingData, saveBooking, getBookings }}>
       {children}
     </BookingContext.Provider>
   );

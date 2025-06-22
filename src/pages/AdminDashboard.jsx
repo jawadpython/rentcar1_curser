@@ -65,10 +65,23 @@ const AdminDashboard = () => {
         <ul className="divide-y">
           {recent.length === 0 ? <li className="py-4 text-gray-500">Aucune réservation récente.</li> : recent.map((b, idx) => (
             <li key={idx} className="py-4 flex flex-col md:flex-row md:items-center md:gap-6">
-              <span className="font-semibold">{b.city}</span>
-              <span className="text-gray-500">{b.selectedCar.name}</span>
-              <span className="text-gray-500">{b.startDate} → {b.endDate}</span>
-              <span className="text-gray-500">{b.selectedCar.price} €</span>
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="font-semibold">{b.city?.name || b.city}</span>
+                  <span className="text-gray-500">{b.selectedCar?.name}</span>
+                </div>
+                <div className="text-sm text-gray-500">
+                  {b.startDate} → {b.endDate}
+                </div>
+                {b.userInfo && (
+                  <div className="text-sm text-gray-500 mt-1">
+                    {b.userInfo.firstName} {b.userInfo.lastName} • {b.userInfo.phone}
+                  </div>
+                )}
+              </div>
+              <div className="text-right">
+                <span className="text-gray-500 font-semibold">{b.selectedCar?.price} €</span>
+              </div>
             </li>
           ))}
         </ul>
