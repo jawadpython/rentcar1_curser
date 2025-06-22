@@ -42,16 +42,40 @@ const AdminCars = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-6">
-      <h1 className="text-2xl font-bold mb-6">Gestion des voitures</h1>
-      <form onSubmit={handleSubmit} className="mb-8 flex flex-col md:flex-row gap-4 items-end">
-        <input name="name" value={form.name} onChange={handleChange} placeholder="Nom" className="border rounded px-3 py-2" required />
-        <input name="image" value={form.image} onChange={handleChange} placeholder="URL de l'image" className="border rounded px-3 py-2" required />
-        <input name="price" value={form.price} onChange={handleChange} type="number" min={0} placeholder="Prix/jour" className="border rounded px-3 py-2" required />
-        <button type="submit" className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600 transition-colors">{editIdx !== null ? 'Modifier' : 'Ajouter'}</button>
+    <div className="max-w-4xl mx-auto mt-6 p-2 sm:p-4 md:p-6">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-center">Gestion des voitures</h1>
+      <form onSubmit={handleSubmit} className="mb-6 flex flex-col gap-3 sm:gap-4 md:flex-row md:items-end">
+        <input name="name" value={form.name} onChange={handleChange} placeholder="Nom" className="border rounded px-3 py-2 w-full md:w-auto text-base focus:outline-none focus:ring-2 focus:ring-teal-400" required />
+        <input name="image" value={form.image} onChange={handleChange} placeholder="URL de l'image" className="border rounded px-3 py-2 w-full md:w-auto text-base focus:outline-none focus:ring-2 focus:ring-teal-400" required />
+        <input name="price" value={form.price} onChange={handleChange} type="number" min={0} placeholder="Prix/jour" className="border rounded px-3 py-2 w-full md:w-auto text-base focus:outline-none focus:ring-2 focus:ring-teal-400" required />
+        <button type="submit" className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600 transition-colors w-full md:w-auto text-base font-semibold">{editIdx !== null ? 'Modifier' : 'Ajouter'}</button>
       </form>
-      <div className="overflow-x-auto rounded-lg shadow">
-        <table className="min-w-full bg-white">
+      {/* Card layout for mobile, table for md+ */}
+      <div className="block md:hidden">
+        {cars.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">Aucune voiture.</div>
+        ) : (
+          <div className="flex flex-col gap-4">
+            {cars.map((car, idx) => (
+              <div key={idx} className="bg-white rounded-lg shadow p-4 flex flex-col gap-2">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-semibold text-lg">{car.name}</span>
+                  <div className="flex gap-2">
+                    <button onClick={() => handleEdit(idx)} className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">Éditer</button>
+                    <button onClick={() => handleDelete(idx)} className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm">Supprimer</button>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <img src={car.image} alt={car.name} className="w-20 h-12 object-cover rounded shadow" />
+                  <span className="font-medium">{car.price} € / jour</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      <div className="overflow-x-auto rounded-lg shadow hidden md:block">
+        <table className="min-w-[500px] w-full bg-white text-sm md:text-base">
           <thead>
             <tr className="bg-gray-100 text-gray-700 text-left">
               <th className="py-3 px-4">Nom</th>

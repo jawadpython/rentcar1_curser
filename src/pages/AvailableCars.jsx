@@ -129,16 +129,16 @@ const AvailableCars = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Nos Véhicules Disponibles</h1>
-          <p className="text-gray-600">Choisissez le véhicule qui vous convient le mieux</p>
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-xl sm:text-3xl font-bold text-gray-900 mb-2">Nos Véhicules Disponibles</h1>
+          <p className="text-gray-600 text-sm sm:text-base">Choisissez le véhicule qui vous convient le mieux</p>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6 sm:mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {/* Search */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Rechercher</label>
@@ -147,7 +147,7 @@ const AvailableCars = () => {
                 placeholder="Nom du véhicule..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
               />
             </div>
 
@@ -157,7 +157,7 @@ const AvailableCars = () => {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
               >
                 {categories.map(category => (
                   <option key={category.id} value={category.id}>{category.name}</option>
@@ -171,7 +171,7 @@ const AvailableCars = () => {
               <select
                 value={priceFilter}
                 onChange={(e) => setPriceFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
               >
                 {priceRanges.map(range => (
                   <option key={range.id} value={range.id}>{range.name}</option>
@@ -182,21 +182,21 @@ const AvailableCars = () => {
         </div>
 
         {/* Results Count */}
-        <div className="mb-6">
-          <p className="text-gray-600">
+        <div className="mb-4 sm:mb-6">
+          <p className="text-gray-600 text-sm sm:text-base">
             {filteredCars.length} véhicule{filteredCars.length !== 1 ? 's' : ''} trouvé{filteredCars.length !== 1 ? 's' : ''}
           </p>
         </div>
 
         {/* Cars Grid */}
         {filteredCars.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-gray-400 text-6xl mb-4">🚗</div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Aucun véhicule trouvé</h3>
-            <p className="text-gray-600">Essayez de modifier vos critères de recherche</p>
+          <div className="text-center py-8 sm:py-12">
+            <div className="text-gray-400 text-5xl sm:text-6xl mb-4">🚗</div>
+            <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">Aucun véhicule trouvé</h3>
+            <p className="text-gray-600 text-sm sm:text-base">Essayez de modifier vos critères de recherche</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {filteredCars.map((car) => (
               <CarCard
                 key={car.id}

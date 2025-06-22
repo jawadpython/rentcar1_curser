@@ -113,7 +113,7 @@ const UserInfo = () => {
 
     if (!formData.phone.trim()) {
       newErrors.phone = 'Le numéro de téléphone est requis';
-    } else if (!/^[+]?[0-9\s\-()]{8,}$/.test(formData.phone)) {
+    } else if (!/^[+]?\d{8,}$/.test(formData.phone.replace(/\D/g, ''))) {
       newErrors.phone = 'Le numéro de téléphone n\'est pas valide';
     }
 
@@ -199,323 +199,180 @@ const UserInfo = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Informations Personnelles</h1>
-          <p className="text-gray-600">Veuillez remplir vos informations pour finaliser votre réservation</p>
-        </div>
-
-        {/* Booking Summary */}
-        {bookingData.selectedCar && (
-          <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Résumé de votre réservation</h2>
-            <div className="flex items-center space-x-4">
-              <img 
-                src={bookingData.selectedCar.image} 
-                alt={bookingData.selectedCar.name}
-                className="w-20 h-12 object-cover rounded-lg"
-              />
-              <div>
-                <h3 className="font-medium text-gray-900">{bookingData.selectedCar.name}</h3>
-                <p className="text-gray-600">{bookingData.selectedCar.price}€ par jour</p>
-                {bookingData.city && (
-                  <p className="text-sm text-gray-500">Ville: {bookingData.city.name}</p>
-                )}
-              </div>
-            </div>
+    <div className="max-w-2xl mx-auto mt-6 p-2 sm:p-4 md:p-6">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4 text-center">Informations du client</h1>
+      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow p-4 sm:p-6 flex flex-col gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-1" htmlFor="firstName">Prénom</label>
+            <input
+              id="firstName"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleInputChange}
+              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
+              placeholder="Prénom"
+              autoComplete="given-name"
+            />
+            {errors.firstName && <div className="text-red-500 text-xs mt-1 break-words">{errors.firstName}</div>}
           </div>
-        )}
-
-        {/* Form */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Personal Information */}
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Informations Personnelles</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Prénom *
-                  </label>
-                  <input
-                    type="text"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleInputChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.firstName ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    placeholder="Votre prénom"
-                  />
-                  {errors.firstName && (
-                    <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Nom de famille *
-                  </label>
-                  <input
-                    type="text"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.lastName ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    placeholder="Votre nom de famille"
-                  />
-                  {errors.lastName && (
-                    <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email *
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.email ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    placeholder="votre.email@exemple.com"
-                  />
-                  {errors.email && (
-                    <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Téléphone *
-                  </label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.phone ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    placeholder="+33 6 12 34 56 78"
-                  />
-                  {errors.phone && (
-                    <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Address Information */}
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Adresse</h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Adresse complète *
-                  </label>
-                  <input
-                    type="text"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.address ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    placeholder="123 Rue de la Paix"
-                  />
-                  {errors.address && (
-                    <p className="text-red-500 text-sm mt-1">{errors.address}</p>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Ville *
-                    </label>
-                    <input
-                      type="text"
-                      name="city"
-                      value={formData.city}
-                      onChange={handleInputChange}
-                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                        errors.city ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                      placeholder="Paris"
-                    />
-                    {errors.city && (
-                      <p className="text-red-500 text-sm mt-1">{errors.city}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Code postal *
-                    </label>
-                    <input
-                      type="text"
-                      name="postalCode"
-                      value={formData.postalCode}
-                      onChange={handleInputChange}
-                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                        errors.postalCode ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                      placeholder="75001"
-                    />
-                    {errors.postalCode && (
-                      <p className="text-red-500 text-sm mt-1">{errors.postalCode}</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* License Information */}
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Permis de conduire</h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Photo du permis de conduire *
-                  </label>
-                  <div className="space-y-3">
-                    {!licensePhotoPreview ? (
-                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleFileChange}
-                          className="hidden"
-                          id="licensePhoto"
-                        />
-                        <label htmlFor="licensePhoto" className="cursor-pointer">
-                          <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                          <p className="mt-2 text-sm text-gray-600">
-                            Cliquez pour télécharger ou glissez-déposez
-                          </p>
-                          <p className="text-xs text-gray-500 mt-1">
-                            PNG, JPG jusqu'à 5MB
-                          </p>
-                        </label>
-                      </div>
-                    ) : (
-                      <div className="relative">
-                        <img
-                          src={licensePhotoPreview}
-                          alt="Aperçu du permis"
-                          className="w-full max-w-md h-auto rounded-lg border border-gray-300"
-                        />
-                        <button
-                          type="button"
-                          onClick={removeLicensePhoto}
-                          className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
-                        >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        </button>
-                      </div>
-                    )}
-                    {errors.licensePhoto && (
-                      <p className="text-red-500 text-sm">{errors.licensePhoto}</p>
-                    )}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Date d'expiration *
-                  </label>
-                  <input
-                    type="date"
-                    name="licenseExpiry"
-                    value={formData.licenseExpiry}
-                    onChange={handleInputChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.licenseExpiry ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                  />
-                  {errors.licenseExpiry && (
-                    <p className="text-red-500 text-sm mt-1">{errors.licenseExpiry}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Additional Information */}
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Informations Supplémentaires</h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Numéro de passeport (optionnel)
-                  </label>
-                  <input
-                    type="text"
-                    name="passportNumber"
-                    value={formData.passportNumber}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="12AB34567"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Demandes spéciales (optionnel)
-                  </label>
-                  <textarea
-                    name="specialRequests"
-                    value={formData.specialRequests}
-                    onChange={handleInputChange}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Siège bébé, GPS, etc."
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Navigation Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-6">
-              <button
-                type="button"
-                onClick={handleBack}
-                className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
-              >
-                Retour
-              </button>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? (
-                  <span className="flex items-center justify-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Traitement...
-                  </span>
-                ) : (
-                  'Continuer vers la confirmation'
-                )}
-              </button>
-            </div>
-          </form>
+          <div>
+            <label className="block text-sm font-medium mb-1" htmlFor="lastName">Nom de famille</label>
+            <input
+              id="lastName"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleInputChange}
+              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
+              placeholder="Nom de famille"
+              autoComplete="family-name"
+            />
+            {errors.lastName && <div className="text-red-500 text-xs mt-1 break-words">{errors.lastName}</div>}
+          </div>
         </div>
-      </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-1" htmlFor="email">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
+              placeholder="Email"
+              autoComplete="email"
+            />
+            {errors.email && <div className="text-red-500 text-xs mt-1 break-words">{errors.email}</div>}
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1" htmlFor="phone">Téléphone</label>
+            <input
+              id="phone"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
+              placeholder="Téléphone"
+              autoComplete="tel"
+            />
+            {errors.phone && <div className="text-red-500 text-xs mt-1 break-words">{errors.phone}</div>}
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-1" htmlFor="address">Adresse</label>
+            <input
+              id="address"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
+              placeholder="Adresse"
+              autoComplete="street-address"
+            />
+            {errors.address && <div className="text-red-500 text-xs mt-1 break-words">{errors.address}</div>}
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1" htmlFor="city">Ville</label>
+            <input
+              id="city"
+              name="city"
+              value={formData.city}
+              onChange={handleInputChange}
+              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
+              placeholder="Ville"
+              autoComplete="address-level2"
+            />
+            {errors.city && <div className="text-red-500 text-xs mt-1 break-words">{errors.city}</div>}
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-1" htmlFor="postalCode">Code postal</label>
+            <input
+              id="postalCode"
+              name="postalCode"
+              value={formData.postalCode}
+              onChange={handleInputChange}
+              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
+              placeholder="Code postal"
+              autoComplete="postal-code"
+            />
+            {errors.postalCode && <div className="text-red-500 text-xs mt-1 break-words">{errors.postalCode}</div>}
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1" htmlFor="licenseExpiry">Expiration du permis</label>
+            <input
+              id="licenseExpiry"
+              name="licenseExpiry"
+              type="date"
+              value={formData.licenseExpiry}
+              onChange={handleInputChange}
+              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
+            />
+            {errors.licenseExpiry && <div className="text-red-500 text-xs mt-1 break-words">{errors.licenseExpiry}</div>}
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-1" htmlFor="passportNumber">Numéro de passeport (optionnel)</label>
+            <input
+              id="passportNumber"
+              name="passportNumber"
+              value={formData.passportNumber}
+              onChange={handleInputChange}
+              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
+              placeholder="Numéro de passeport"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1" htmlFor="specialRequests">Demandes spéciales (optionnel)</label>
+            <input
+              id="specialRequests"
+              name="specialRequests"
+              value={formData.specialRequests}
+              onChange={handleInputChange}
+              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
+              placeholder="Demandes spéciales"
+            />
+          </div>
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1" htmlFor="licensePhoto">Photo du permis de conduire</label>
+          <input
+            id="licensePhoto"
+            name="licensePhoto"
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="block w-full text-base border rounded py-2 px-3 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-teal-50 file:text-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+          />
+          {licensePhotoPreview && (
+            <div className="mt-2 flex flex-col sm:flex-row items-start sm:items-center gap-2">
+              <img src={licensePhotoPreview} alt="Aperçu du permis" className="w-32 h-20 object-cover rounded shadow" />
+              <button type="button" onClick={removeLicensePhoto} className="text-red-500 text-xs underline mt-1 sm:mt-0">Retirer la photo</button>
+            </div>
+          )}
+          {errors.licensePhoto && <div className="text-red-500 text-xs mt-1 break-words">{errors.licensePhoto}</div>}
+        </div>
+        <div className="flex flex-col sm:flex-row gap-3 mt-2">
+          <button
+            type="button"
+            onClick={handleBack}
+            className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition-colors w-full sm:w-auto text-base font-semibold"
+          >
+            Retour
+          </button>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600 transition-colors w-full sm:w-auto text-base font-semibold disabled:opacity-60"
+          >
+            {isSubmitting ? 'Envoi en cours...' : 'Valider'}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

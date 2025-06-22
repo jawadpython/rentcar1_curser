@@ -142,17 +142,17 @@ const SelectDate = () => {
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-[#fafbfa]">
       {/* Left: Calendar */}
-      <div className="md:w-1/2 w-full p-8 flex flex-col">
+      <div className="md:w-1/2 w-full p-4 sm:p-8 flex flex-col">
         <div className="flex items-center mb-2">
           <button onClick={() => navigate(-1)} className="text-2xl mr-3 hover:bg-gray-200 rounded-full p-1 transition-colors" aria-label="Retour">
             <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke="#222" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </button>
           <div>
-            <h2 className="text-lg font-semibold leading-tight">Dates</h2>
-            <p className="text-gray-500 text-sm leading-tight">Sélectionner la date de départ et de retour</p>
+            <h2 className="text-base sm:text-lg font-semibold leading-tight">Dates</h2>
+            <p className="text-gray-500 text-xs sm:text-sm leading-tight">Sélectionner la date de départ et de retour</p>
           </div>
         </div>
-        <div className="bg-white rounded-2xl shadow p-6 mt-4 border border-gray-100">
+        <div className="bg-white rounded-2xl shadow p-4 sm:p-6 mt-4 border border-gray-100">
           <DayPicker
             mode="range"
             selected={range}
@@ -178,46 +178,35 @@ const SelectDate = () => {
         </div>
       </div>
       {/* Right: Time Selection */}
-      <div className="md:w-1/2 w-full flex flex-col justify-between p-8">
+      <div className="md:w-1/2 w-full flex flex-col justify-between p-4 sm:p-8">
         <form onSubmit={handleSubmit} className="flex flex-col h-full justify-between">
           <div>
-            <h2 className="text-lg font-semibold mb-1">Horaires</h2>
-            <p className="text-gray-500 text-sm mb-8">Sélectionner les heures de départ et d'arrivée</p>
+            <h2 className="text-base sm:text-lg font-semibold mb-1">Horaires</h2>
+            <p className="text-gray-500 text-xs sm:text-sm mb-6 sm:mb-8">Sélectionner les heures de départ et d'arrivée</p>
             {/* Départ */}
-            <div className="mb-8">
+            <div className="mb-6 sm:mb-8">
               <div className="flex items-center justify-between mb-1">
-                <div className="font-medium text-base">Départ</div>
+                <div className="font-medium text-sm sm:text-base">Départ</div>
                 <div className="text-xs text-gray-500">{range.from ? formatDate(range.from) : ''}</div>
               </div>
               <HourSlider value={startHour} onChange={e => setStartHour(Number(e.target.value))} disabled={!range.from} />
             </div>
             {/* Retour */}
-            <div className="mb-8">
+            <div className="mb-6 sm:mb-8">
               <div className="flex items-center justify-between mb-1">
-                <div className="font-medium text-base">Retour</div>
+                <div className="font-medium text-sm sm:text-base">Retour</div>
                 <div className="text-xs text-gray-500">{range.to ? formatDate(range.to) : ''}</div>
               </div>
               <HourSlider value={endHour} onChange={e => setEndHour(Number(e.target.value))} disabled={!range.to} />
             </div>
           </div>
-          {/* Button at the bottom */}
-          <div className="w-full flex items-center justify-center mt-auto mb-2">
-            <button
-              type="submit"
-              disabled={!isValid || submitting}
-              className={`w-full max-w-xl py-3 rounded-xl text-lg font-bold tracking-wider transition-all shadow-md ${isValid && !submitting ? 'bg-gray-900 text-teal-400 hover:bg-gray-800' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
-              style={{ letterSpacing: 2 }}
-            >
-              {submitting ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg className="animate-spin h-5 w-5 text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
-                  Chargement…
-                </span>
-              ) : (
-                'VALIDER'
-              )}
-            </button>
-          </div>
+          <button
+            type="submit"
+            disabled={!isValid || submitting}
+            className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600 transition-colors w-full text-base font-semibold disabled:opacity-60 mt-4"
+          >
+            {submitting ? 'Chargement...' : 'Valider les dates'}
+          </button>
         </form>
       </div>
     </div>
