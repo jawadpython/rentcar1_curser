@@ -27,8 +27,8 @@ const HourSlider = ({ value, onChange, disabled }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Pill width
-  const pillWidth = 80;
+  // Pill width - responsive
+  const pillWidth = window.innerWidth < 640 ? 70 : 80;
   const min = 0;
   const max = 23;
   const percent = (value - min) / (max - min);
@@ -36,9 +36,9 @@ const HourSlider = ({ value, onChange, disabled }) => {
   const pillLeft = percent * (trackWidth - pillWidth) + pillWidth / 2;
 
   return (
-    <div className="relative w-full" style={{ height: 40 }}>
+    <div className="relative w-full" style={{ height: 44 }}>
       {/* Teal line (track) */}
-      <div ref={trackRef} className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[2px] bg-teal-300 z-0" style={{ borderRadius: 2 }} />
+      <div ref={trackRef} className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[3px] bg-teal-300 z-0" style={{ borderRadius: 2 }} />
       {/* Custom pill thumb */}
       <div
         className="absolute z-10 transition-all duration-200 pointer-events-none"
@@ -48,7 +48,7 @@ const HourSlider = ({ value, onChange, disabled }) => {
           transform: 'translate(-50%, -50%)',
         }}
       >
-        <span className="inline-block bg-white border-2 border-teal-300 text-teal-700 font-semibold rounded-full px-6 py-1 text-base shadow select-none" style={{ minWidth: pillWidth, textAlign: 'center', height: 36, lineHeight: '32px', boxSizing: 'border-box' }}>{formatHour(value)}</span>
+        <span className="inline-block bg-white border-2 border-teal-300 text-teal-700 font-semibold rounded-full px-4 sm:px-6 py-1 text-sm sm:text-base shadow select-none touch-manipulation" style={{ minWidth: pillWidth, textAlign: 'center', height: 36, lineHeight: '32px', boxSizing: 'border-box' }}>{formatHour(value)}</span>
       </div>
       {/* Visually hidden slider for accessibility */}
       <input
@@ -62,7 +62,7 @@ const HourSlider = ({ value, onChange, disabled }) => {
         className="w-full h-2 mt-0 mb-0 z-20 relative custom-hour-slider"
         disabled={disabled}
         aria-label="Sélectionner l'heure"
-        style={{ background: 'transparent', position: 'absolute', top: '50%', left: 0, transform: 'translateY(-50%)', opacity: 0, height: 36, cursor: disabled ? 'not-allowed' : 'pointer' }}
+        style={{ background: 'transparent', position: 'absolute', top: '50%', left: 0, transform: 'translateY(-50%)', opacity: 0, height: 44, cursor: disabled ? 'not-allowed' : 'pointer' }}
       />
       <style>{`
         .custom-hour-slider::-webkit-slider-thumb {
@@ -86,7 +86,7 @@ const HourSlider = ({ value, onChange, disabled }) => {
           border: none;
         }
         .custom-hour-slider::-webkit-slider-runnable-track {
-          height: 2px;
+          height: 3px;
           background: transparent;
         }
         .custom-hour-slider::-ms-fill-lower {
@@ -140,19 +140,25 @@ const SelectDate = () => {
   const isValid = range.from && range.to;
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-[#fafbfa]">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-[#fafbfa]">
       {/* Left: Calendar */}
-      <div className="md:w-1/2 w-full p-4 sm:p-8 flex flex-col">
-        <div className="flex items-center mb-2">
-          <button onClick={() => navigate(-1)} className="text-2xl mr-3 hover:bg-gray-200 rounded-full p-1 transition-colors" aria-label="Retour">
-            <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke="#222" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      <div className="lg:w-1/2 w-full p-3 sm:p-4 lg:p-8 flex flex-col">
+        <div className="flex items-center mb-2 sm:mb-4">
+          <button 
+            onClick={() => navigate(-1)} 
+            className="text-xl sm:text-2xl mr-2 sm:mr-3 hover:bg-gray-200 rounded-full p-1 transition-colors touch-manipulation" 
+            aria-label="Retour"
+          >
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path d="M15 19l-7-7 7-7" stroke="#222" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </button>
           <div>
-            <h2 className="text-base sm:text-lg font-semibold leading-tight">Dates</h2>
+            <h2 className="text-sm sm:text-base lg:text-lg font-semibold leading-tight">Dates</h2>
             <p className="text-gray-500 text-xs sm:text-sm leading-tight">Sélectionner la date de départ et de retour</p>
           </div>
         </div>
-        <div className="bg-white rounded-2xl shadow p-4 sm:p-6 mt-4 border border-gray-100">
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow p-3 sm:p-4 lg:p-6 mt-3 sm:mt-4 border border-gray-100">
           <DayPicker
             mode="range"
             selected={range}
@@ -169,41 +175,45 @@ const SelectDate = () => {
               today: 'border border-teal-400',
             }}
             styles={{
-              caption: { fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '0.5rem' },
-              head_cell: { color: '#222', fontWeight: '600', fontSize: '1rem', letterSpacing: '0.05em' },
-              cell: { padding: '0.6rem', fontSize: '1rem' },
+              caption: { fontWeight: 'bold', fontSize: '1rem', marginBottom: '0.5rem' },
+              head_cell: { color: '#222', fontWeight: '600', fontSize: '0.9rem', letterSpacing: '0.05em' },
+              cell: { padding: '0.5rem', fontSize: '0.9rem' },
               nav_button: { color: '#222' },
             }}
           />
         </div>
       </div>
+      
       {/* Right: Time Selection */}
-      <div className="md:w-1/2 w-full flex flex-col justify-between p-4 sm:p-8">
+      <div className="lg:w-1/2 w-full flex flex-col justify-between p-3 sm:p-4 lg:p-8">
         <form onSubmit={handleSubmit} className="flex flex-col h-full justify-between">
           <div>
-            <h2 className="text-base sm:text-lg font-semibold mb-1">Horaires</h2>
-            <p className="text-gray-500 text-xs sm:text-sm mb-6 sm:mb-8">Sélectionner les heures de départ et d'arrivée</p>
+            <h2 className="text-sm sm:text-base lg:text-lg font-semibold mb-1 sm:mb-2">Horaires</h2>
+            <p className="text-gray-500 text-xs sm:text-sm mb-4 sm:mb-6 lg:mb-8">Sélectionner les heures de départ et d'arrivée</p>
+            
             {/* Départ */}
-            <div className="mb-6 sm:mb-8">
-              <div className="flex items-center justify-between mb-1">
+            <div className="mb-4 sm:mb-6 lg:mb-8">
+              <div className="flex items-center justify-between mb-2">
                 <div className="font-medium text-sm sm:text-base">Départ</div>
                 <div className="text-xs text-gray-500">{range.from ? formatDate(range.from) : ''}</div>
               </div>
               <HourSlider value={startHour} onChange={e => setStartHour(Number(e.target.value))} disabled={!range.from} />
             </div>
+            
             {/* Retour */}
-            <div className="mb-6 sm:mb-8">
-              <div className="flex items-center justify-between mb-1">
+            <div className="mb-4 sm:mb-6 lg:mb-8">
+              <div className="flex items-center justify-between mb-2">
                 <div className="font-medium text-sm sm:text-base">Retour</div>
                 <div className="text-xs text-gray-500">{range.to ? formatDate(range.to) : ''}</div>
               </div>
               <HourSlider value={endHour} onChange={e => setEndHour(Number(e.target.value))} disabled={!range.to} />
             </div>
           </div>
+          
           <button
             type="submit"
             disabled={!isValid || submitting}
-            className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600 transition-colors w-full text-base font-semibold disabled:opacity-60 mt-4"
+            className="bg-teal-500 text-white px-4 py-3 sm:py-4 rounded-lg hover:bg-teal-600 transition-colors w-full text-sm sm:text-base font-semibold disabled:opacity-60 mt-4 touch-manipulation"
           >
             {submitting ? 'Chargement...' : 'Valider les dates'}
           </button>

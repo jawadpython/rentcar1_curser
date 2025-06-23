@@ -88,7 +88,9 @@ const AdminPanel = () => {
           />
         </div>
       </div>
-      <div className="mb-4 text-lg font-semibold text-teal-700 text-center md:text-left">Recette totale : {totalRevenue.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</div>
+      <div className="mb-4 text-lg font-semibold text-teal-700 text-center md:text-left">Recette totale : <div className="text-2xl sm:text-3xl font-bold text-teal-600">
+        {totalRevenue.toLocaleString('fr-FR', { style: 'currency', currency: 'MAD' })}
+      </div></div>
       {/* Card layout for mobile, table for md+ */}
       <div className="block md:hidden">
         {filtered.length === 0 ? (
@@ -120,7 +122,7 @@ const AdminPanel = () => {
                   <span className="font-medium">Heures: </span>{b.startTime || '--'} - {b.endTime || '--'}
                 </div>
                 <div>
-                  <span className="font-medium">Prix/jour: </span>{b.selectedCar.price} €
+                  <span className="font-medium">Prix/jour: </span>{b.selectedCar.price} MAD
                 </div>
               </div>
             ))}
@@ -160,7 +162,7 @@ const AdminPanel = () => {
                     {b.startTime || '--'}<br />
                     {b.endTime || '--'}
                   </td>
-                  <td className="py-3 px-4">{b.selectedCar.price} €</td>
+                  <td className="py-3 px-4">{b.selectedCar.price} MAD</td>
                   <td className="py-3 px-4">
                     <button
                       onClick={() => handleDelete(bookings.indexOf(b))}

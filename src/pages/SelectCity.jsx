@@ -4,42 +4,42 @@ import { useNavigate } from 'react-router-dom';
 const cities = [
   {
     name: 'Casablanca',
-    image: 'https://images.unsplash.com/photo-1504064860048-974c8788c612?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    image: 'https://images.pexels.com/photos/2404046/pexels-photo-2404046.jpeg',
     station: true,
     airport: true,
     note: 'Plus grande ville du Maroc'
   },
   {
     name: 'Rabat',
-    image: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+    image: 'https://darrbatia.com/wp-content/webpc-passthru.php?src=https://darrbatia.com/wp-content/uploads/ekpJwbR-1024x790-1024x675.jpg&nocache=1',
     station: true,
     airport: true,
     note: 'Capitale du Maroc'
   },
   {
     name: 'Marrakech',
-    image: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+    image: 'https://static.independent.co.uk/s3fs-public/thumbnails/image/2019/05/03/15/marrakech-hero.jpg?quality=75&width=1368&crop=3%3A2%2Csmart&auto=webp',
     station: true,
     airport: true,
     note: 'Ville impériale'
   },
   {
     name: 'Tanger',
-    image: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+    image: 'https://www.virtual-trip.fr/wp-content/uploads/2024/02/grand-socco-1536x866.jpg',
     station: true,
     airport: true,
     note: 'Port méditerranéen'
   },
   {
     name: 'Agadir',
-    image: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+    image: 'https://www.goworldtravel.com/wp-content/uploads/2023/07/Agadir-Morocco.jpg',
     station: true,
     airport: true,
     note: 'Station balnéaire'
   },
   {
     name: 'Settat',
-    image: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+    image: 'https://chantiersdumaroc.ma/wp-content/uploads/2017/11/settat-sans-bidonvilles.jpg',
     station: true,
     airport: false,
     note: 'Ville centrale'
@@ -48,106 +48,72 @@ const cities = [
 
 const SelectCity = () => {
   const navigate = useNavigate();
-  const [hoveredCity, setHoveredCity] = useState(null);
-  const [selectedCity, setSelectedCity] = useState(null);
 
   const handleCitySelect = (city) => {
-    setSelectedCity(city);
-    // On mobile, show the full image first, then navigate on second click
-    if (window.innerWidth >= 768) {
-      navigate('/date', { state: { city } });
-    }
-  };
-
-  const handleFullImageClick = () => {
-    if (selectedCity) {
-      navigate('/date', { state: { city: selectedCity } });
-    }
+    navigate('/date', { state: { city } });
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-[#f7f7f7]">
-      {/* Left Panel */}
-      <div className="md:w-1/2 w-full p-2 sm:p-4 md:p-8 flex flex-col gap-4">
+    <div className="min-h-screen bg-[#f7f7f7] py-8">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back and Title */}
-        <div className="flex items-center gap-3 mb-2">
-          <button onClick={() => navigate(-1)} className="text-xl hover:bg-gray-200 rounded-full p-1 transition-colors" aria-label="Retour">
-            <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke="#222" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        <div className="flex items-center gap-3 mb-2 sm:mb-4">
+          <button 
+            onClick={() => navigate(-1)} 
+            className="text-xl hover:bg-gray-200 rounded-full p-1 transition-colors touch-manipulation" 
+            aria-label="Retour"
+          >
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path d="M15 19l-7-7 7-7" stroke="#222" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </button>
           <div>
-            <div className="font-semibold text-base">Nos villes</div>
-            <div className="text-gray-400 text-sm">Sélectionner une ville</div>
+            <div className="font-semibold text-sm sm:text-base">Nos villes</div>
+            <div className="text-gray-400 text-xs sm:text-sm">Sélectionner une ville</div>
           </div>
         </div>
+        
         {/* Other Cities Section */}
-        <div className="flex items-center gap-2 text-gray-700 text-base font-medium mb-2 mt-2">
-          <span><svg width="18" height="18" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#222" strokeWidth="2" /></svg></span>
+        <div className="flex items-center gap-2 text-gray-700 text-sm sm:text-base font-medium mb-2 sm:mb-4 mt-2">
+          <span>
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke="#222" strokeWidth="2" />
+            </svg>
+          </span>
           <span>Nous sommes présents à</span>
         </div>
-        <div className="flex flex-col gap-4">
+        
+        <div className="flex flex-col gap-3 sm:gap-4">
           {cities.map((city, idx) => (
             <div 
               key={city.name} 
-              className="rounded-2xl overflow-hidden shadow-md cursor-pointer group relative h-[110px] md:h-[110px]"
+              className="rounded-xl sm:rounded-2xl overflow-hidden shadow-md cursor-pointer group relative h-[100px] sm:h-[110px] touch-manipulation"
               onClick={() => handleCitySelect(city)}
-              onMouseEnter={() => setHoveredCity(city)}
-              onMouseLeave={() => setHoveredCity(null)}
             >
-              <img src={city.image} alt={city.name} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-200" />
+              <img 
+                src={city.image} 
+                alt={city.name} 
+                className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-200" 
+              />
               <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
-              <div className="absolute left-4 top-4 sm:left-6 sm:top-6 text-white">
-                <div className="font-bold text-base sm:text-lg tracking-wide flex items-center gap-2">{city.name} <span className="text-xs">{city.station && <span title="Station">&#128646;</span>} {city.airport && <span title="Aéroport">&#9992;&#65039;</span>}</span></div>
+              <div className="absolute left-3 sm:left-4 lg:left-6 top-3 sm:top-4 lg:top-6 text-white">
+                <div className="font-bold text-sm sm:text-base lg:text-lg tracking-wide flex items-center gap-1 sm:gap-2">
+                  {city.name} 
+                  <span className="text-xs">
+                    {city.station && <span title="Station">&#128646;</span>} 
+                    {city.airport && <span title="Aéroport">&#9992;&#65039;</span>}
+                  </span>
+                </div>
                 {city.note && <div className="text-xs mt-1">{city.note}</div>}
                 {!city.note && <div className="text-xs mt-1">Prise en charge en station</div>}
               </div>
-              <div className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 text-white text-xl sm:text-2xl">
+              <div className="absolute right-3 sm:right-4 lg:right-6 top-1/2 -translate-y-1/2 text-white text-lg sm:text-xl lg:text-2xl">
                 <span>&#8250;</span>
               </div>
             </div>
           ))}
         </div>
       </div>
-      {/* Right Panel: Full City Image (hidden on mobile, shown on md+) */}
-      <div className="hidden md:flex md:w-1/2 w-full items-center justify-center bg-[#eaf6fb] p-0">
-        {(hoveredCity || selectedCity) ? (
-          <div 
-            className="w-full h-full relative cursor-pointer"
-            onClick={handleFullImageClick}
-          >
-            <img
-              src={(hoveredCity || selectedCity).image}
-              alt={`${(hoveredCity || selectedCity).name} - Vue complète`}
-              className="w-full h-full object-cover rounded-none md:rounded-l-3xl shadow-lg transition-opacity duration-300"
-              style={{ minHeight: '50vh', maxHeight: '100vh', maxWidth: '100%' }}
-            />
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6 text-white">
-              <h2 className="text-2xl font-bold mb-2">{(hoveredCity || selectedCity).name}</h2>
-              <p className="text-sm opacity-90">{(hoveredCity || selectedCity).note}</p>
-            </div>
-          </div>
-        ) : (
-          <div className="text-gray-500 text-center p-8">
-            <p className="text-lg">Survolez une ville pour voir sa vue complète</p>
-          </div>
-        )}
-      </div>
-      {/* On mobile, show full city image after selection */}
-      {selectedCity && window.innerWidth < 768 && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/70" onClick={handleFullImageClick}>
-          <div className="relative w-full max-w-md mx-auto">
-            <img
-              src={selectedCity.image}
-              alt={`${selectedCity.name} - Vue complète`}
-              className="w-full h-64 object-cover rounded-2xl shadow-lg"
-            />
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 text-white rounded-b-2xl">
-              <h2 className="text-lg font-bold mb-2">{selectedCity.name}</h2>
-              <p className="text-sm opacity-90">{selectedCity.note}</p>
-              <p className="text-sm mt-2">Touchez pour continuer</p>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

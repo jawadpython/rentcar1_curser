@@ -85,7 +85,7 @@ const AdminBookings = () => {
           />
         </div>
       </div>
-      <div className="mb-4 text-lg font-semibold text-teal-700 text-center md:text-left">Recette totale : {totalRevenue.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</div>
+      <div className="mb-4 text-lg font-semibold text-teal-700 text-center md:text-left">Recette totale : {totalRevenue.toLocaleString('fr-FR', { style: 'currency', currency: 'MAD' })}</div>
       {/* Card layout for mobile, table for md+ */}
       <div className="block md:hidden">
         {filtered.length === 0 ? (
@@ -134,7 +134,7 @@ const AdminBookings = () => {
                   {format(new Date(b.startDate), 'dd/MM/yyyy')} - {format(new Date(b.endDate), 'dd/MM/yyyy')}
                 </div>
                 <div>
-                  <span className="font-medium">Prix/jour: </span>{b.selectedCar?.price} €
+                  <span className="font-medium">Prix/jour: </span>{b.selectedCar?.price} MAD
                 </div>
               </div>
             ))}
@@ -184,7 +184,7 @@ const AdminBookings = () => {
                     {format(new Date(b.startDate), 'dd/MM/yyyy')}<br />
                     {format(new Date(b.endDate), 'dd/MM/yyyy')}
                   </td>
-                  <td className="py-3 px-4">{b.selectedCar?.price} €</td>
+                  <td className="py-3 px-4">{b.selectedCar?.price} MAD</td>
                   <td className="py-3 px-4">
                     <div className="flex gap-2">
                       <button
@@ -265,7 +265,7 @@ const AdminBookings = () => {
                     />
                     <div>
                       <h4 className="font-medium text-gray-900">{selectedBooking.selectedCar?.name}</h4>
-                      <p className="text-gray-600">{selectedBooking.selectedCar?.price}€ par jour</p>
+                      <p className="text-gray-600">{selectedBooking.selectedCar?.price} MAD par jour</p>
                       {selectedBooking.selectedCar?.category && (
                         <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded mt-1">
                           {selectedBooking.selectedCar.category}
@@ -336,7 +336,7 @@ const AdminBookings = () => {
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-semibold text-gray-900">Prix total</span>
                     <span className="text-2xl font-bold text-blue-600">
-                      {totalRevenue.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
+                      {totalRevenue.toLocaleString('fr-FR', { style: 'currency', currency: 'MAD' })}
                     </span>
                   </div>
                 </div>

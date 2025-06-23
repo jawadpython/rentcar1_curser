@@ -67,7 +67,7 @@ const AdminCars = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <img src={car.image} alt={car.name} className="w-20 h-12 object-cover rounded shadow" />
-                  <span className="font-medium">{car.price} € / jour</span>
+                  <span className="font-medium">{car.price} MAD / jour</span>
                 </div>
               </div>
             ))}
@@ -91,7 +91,7 @@ const AdminCars = () => {
               <tr key={idx} className="border-b hover:bg-gray-50">
                 <td className="py-3 px-4 font-semibold">{car.name}</td>
                 <td className="py-3 px-4"><img src={car.image} alt={car.name} className="w-20 h-12 object-cover rounded shadow" /></td>
-                <td className="py-3 px-4">{car.price} €</td>
+                <td className="py-3 px-4">{car.price} MAD</td>
                 <td className="py-3 px-4">
                   <button onClick={() => handleEdit(idx)} className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm mr-2">Éditer</button>
                   <button onClick={() => handleDelete(idx)} className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm">Supprimer</button>

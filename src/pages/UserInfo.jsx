@@ -4,25 +4,17 @@ import { useBooking } from '../context/BookingContext';
 
 const UserInfo = () => {
   const navigate = useNavigate();
-  const { updateBookingData, getBookingData } = useBooking();
+  const { updateBookingData } = useBooking();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    email: '',
     phone: '',
-    address: '',
     city: '',
-    postalCode: '',
-    licensePhoto: null,
-    licenseExpiry: '',
-    passportNumber: '',
-    specialRequests: ''
+    licensePhoto: null
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [licensePhotoPreview, setLicensePhotoPreview] = useState(null);
-
-  const bookingData = getBookingData();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -105,36 +97,18 @@ const UserInfo = () => {
       newErrors.lastName = 'Le nom de famille est requis';
     }
 
-    if (!formData.email.trim()) {
-      newErrors.email = 'L\'email est requis';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'L\'email n\'est pas valide';
-    }
-
     if (!formData.phone.trim()) {
       newErrors.phone = 'Le numéro de téléphone est requis';
     } else if (!/^[+]?\d{8,}$/.test(formData.phone.replace(/\D/g, ''))) {
       newErrors.phone = 'Le numéro de téléphone n\'est pas valide';
     }
 
-    if (!formData.address.trim()) {
-      newErrors.address = 'L\'adresse est requise';
-    }
-
     if (!formData.city.trim()) {
       newErrors.city = 'La ville est requise';
     }
 
-    if (!formData.postalCode.trim()) {
-      newErrors.postalCode = 'Le code postal est requis';
-    }
-
     if (!formData.licensePhoto) {
       newErrors.licensePhoto = 'La photo du permis est requise';
-    }
-
-    if (!formData.licenseExpiry.trim()) {
-      newErrors.licenseExpiry = 'La date d\'expiration du permis est requise';
     }
 
     setErrors(newErrors);
@@ -169,19 +143,6 @@ const UserInfo = () => {
       
       updateBookingData({ userInfo: userInfoWithPhoto });
       
-      // Get the complete booking data
-      const completeBookingData = {
-        ...bookingData,
-        userInfo: userInfoWithPhoto,
-        bookingDate: new Date().toISOString(),
-        bookingId: `BK${Date.now()}`
-      };
-      
-      // Save to localStorage for admin panel
-      const existingBookings = JSON.parse(localStorage.getItem('bookings') || '[]');
-      existingBookings.push(completeBookingData);
-      localStorage.setItem('bookings', JSON.stringify(existingBookings));
-      
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
@@ -199,180 +160,131 @@ const UserInfo = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-6 p-2 sm:p-4 md:p-6">
-      <h1 className="text-xl sm:text-2xl font-bold mb-4 text-center">Informations du client</h1>
-      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow p-4 sm:p-6 flex flex-col gap-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-2xl mx-auto p-3 sm:p-4 lg:p-6">
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-4 sm:mb-6">
+          <button 
+            onClick={handleBack} 
+            className="text-xl hover:bg-gray-200 rounded-full p-1 transition-colors touch-manipulation" 
+            aria-label="Retour"
+          >
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path d="M15 19l-7-7 7-7" stroke="#222" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
           <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="firstName">Prénom</label>
-            <input
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleInputChange}
-              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
-              placeholder="Prénom"
-              autoComplete="given-name"
-            />
-            {errors.firstName && <div className="text-red-500 text-xs mt-1 break-words">{errors.firstName}</div>}
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="lastName">Nom de famille</label>
-            <input
-              id="lastName"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
-              placeholder="Nom de famille"
-              autoComplete="family-name"
-            />
-            {errors.lastName && <div className="text-red-500 text-xs mt-1 break-words">{errors.lastName}</div>}
+            <h1 className="text-lg sm:text-xl lg:text-2xl font-bold">Informations du client</h1>
+            <p className="text-gray-500 text-xs sm:text-sm">Complétez vos informations personnelles</p>
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="email">Email</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
-              placeholder="Email"
-              autoComplete="email"
-            />
-            {errors.email && <div className="text-red-500 text-xs mt-1 break-words">{errors.email}</div>}
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="phone">Téléphone</label>
-            <input
-              id="phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
-              placeholder="Téléphone"
-              autoComplete="tel"
-            />
-            {errors.phone && <div className="text-red-500 text-xs mt-1 break-words">{errors.phone}</div>}
-          </div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="address">Adresse</label>
-            <input
-              id="address"
-              name="address"
-              value={formData.address}
-              onChange={handleInputChange}
-              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
-              placeholder="Adresse"
-              autoComplete="street-address"
-            />
-            {errors.address && <div className="text-red-500 text-xs mt-1 break-words">{errors.address}</div>}
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="city">Ville</label>
-            <input
-              id="city"
-              name="city"
-              value={formData.city}
-              onChange={handleInputChange}
-              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
-              placeholder="Ville"
-              autoComplete="address-level2"
-            />
-            {errors.city && <div className="text-red-500 text-xs mt-1 break-words">{errors.city}</div>}
-          </div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="postalCode">Code postal</label>
-            <input
-              id="postalCode"
-              name="postalCode"
-              value={formData.postalCode}
-              onChange={handleInputChange}
-              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
-              placeholder="Code postal"
-              autoComplete="postal-code"
-            />
-            {errors.postalCode && <div className="text-red-500 text-xs mt-1 break-words">{errors.postalCode}</div>}
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="licenseExpiry">Expiration du permis</label>
-            <input
-              id="licenseExpiry"
-              name="licenseExpiry"
-              type="date"
-              value={formData.licenseExpiry}
-              onChange={handleInputChange}
-              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
-            />
-            {errors.licenseExpiry && <div className="text-red-500 text-xs mt-1 break-words">{errors.licenseExpiry}</div>}
-          </div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="passportNumber">Numéro de passeport (optionnel)</label>
-            <input
-              id="passportNumber"
-              name="passportNumber"
-              value={formData.passportNumber}
-              onChange={handleInputChange}
-              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
-              placeholder="Numéro de passeport"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="specialRequests">Demandes spéciales (optionnel)</label>
-            <input
-              id="specialRequests"
-              name="specialRequests"
-              value={formData.specialRequests}
-              onChange={handleInputChange}
-              className="border rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
-              placeholder="Demandes spéciales"
-            />
-          </div>
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1" htmlFor="licensePhoto">Photo du permis de conduire</label>
-          <input
-            id="licensePhoto"
-            name="licensePhoto"
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="block w-full text-base border rounded py-2 px-3 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-teal-50 file:text-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
-          />
-          {licensePhotoPreview && (
-            <div className="mt-2 flex flex-col sm:flex-row items-start sm:items-center gap-2">
-              <img src={licensePhotoPreview} alt="Aperçu du permis" className="w-32 h-20 object-cover rounded shadow" />
-              <button type="button" onClick={removeLicensePhoto} className="text-red-500 text-xs underline mt-1 sm:mt-0">Retirer la photo</button>
+
+        <form onSubmit={handleSubmit} className="bg-white rounded-lg sm:rounded-xl shadow-lg p-4 sm:p-6 flex flex-col gap-4 sm:gap-6">
+          {/* Personal Information */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <div>
+              <label className="block text-xs sm:text-sm font-medium mb-1 sm:mb-2" htmlFor="firstName">Prénom *</label>
+              <input
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleInputChange}
+                className="border rounded-lg px-3 py-2.5 sm:py-3 w-full text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-teal-400 touch-manipulation"
+                placeholder="Prénom"
+                autoComplete="given-name"
+              />
+              {errors.firstName && <div className="text-red-500 text-xs mt-1 break-words">{errors.firstName}</div>}
             </div>
-          )}
-          {errors.licensePhoto && <div className="text-red-500 text-xs mt-1 break-words">{errors.licensePhoto}</div>}
-        </div>
-        <div className="flex flex-col sm:flex-row gap-3 mt-2">
-          <button
-            type="button"
-            onClick={handleBack}
-            className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition-colors w-full sm:w-auto text-base font-semibold"
-          >
-            Retour
-          </button>
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600 transition-colors w-full sm:w-auto text-base font-semibold disabled:opacity-60"
-          >
-            {isSubmitting ? 'Envoi en cours...' : 'Valider'}
-          </button>
-        </div>
-      </form>
+            <div>
+              <label className="block text-xs sm:text-sm font-medium mb-1 sm:mb-2" htmlFor="lastName">Nom de famille *</label>
+              <input
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleInputChange}
+                className="border rounded-lg px-3 py-2.5 sm:py-3 w-full text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-teal-400 touch-manipulation"
+                placeholder="Nom de famille"
+                autoComplete="family-name"
+              />
+              {errors.lastName && <div className="text-red-500 text-xs mt-1 break-words">{errors.lastName}</div>}
+            </div>
+          </div>
+
+          {/* Contact Information */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <div>
+              <label className="block text-xs sm:text-sm font-medium mb-1 sm:mb-2" htmlFor="phone">Téléphone *</label>
+              <input
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                className="border rounded-lg px-3 py-2.5 sm:py-3 w-full text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-teal-400 touch-manipulation"
+                placeholder="Téléphone"
+                autoComplete="tel"
+              />
+              {errors.phone && <div className="text-red-500 text-xs mt-1 break-words">{errors.phone}</div>}
+            </div>
+            <div>
+              <label className="block text-xs sm:text-sm font-medium mb-1 sm:mb-2" htmlFor="city">Ville *</label>
+              <input
+                id="city"
+                name="city"
+                value={formData.city}
+                onChange={handleInputChange}
+                className="border rounded-lg px-3 py-2.5 sm:py-3 w-full text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-teal-400 touch-manipulation"
+                placeholder="Ville"
+                autoComplete="address-level2"
+              />
+              {errors.city && <div className="text-red-500 text-xs mt-1 break-words">{errors.city}</div>}
+            </div>
+          </div>
+
+          {/* License Photo Upload */}
+          <div>
+            <label className="block text-xs sm:text-sm font-medium mb-1 sm:mb-2" htmlFor="licensePhoto">Photo du permis de conduire *</label>
+            <input
+              id="licensePhoto"
+              name="licensePhoto"
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="block w-full text-sm sm:text-base border rounded-lg py-2.5 sm:py-3 px-3 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs sm:file:text-sm file:bg-teal-50 file:text-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-400 touch-manipulation"
+            />
+            {licensePhotoPreview && (
+              <div className="mt-3 flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                <img src={licensePhotoPreview} alt="Aperçu du permis" className="w-24 sm:w-32 h-16 sm:h-20 object-cover rounded-lg shadow" />
+                <button 
+                  type="button" 
+                  onClick={removeLicensePhoto} 
+                  className="text-red-500 text-xs underline touch-manipulation"
+                >
+                  Retirer la photo
+                </button>
+              </div>
+            )}
+            {errors.licensePhoto && <div className="text-red-500 text-xs mt-1 break-words">{errors.licensePhoto}</div>}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 mt-4 sm:mt-6">
+            <button
+              type="button"
+              onClick={handleBack}
+              className="bg-gray-200 text-gray-700 px-4 py-3 sm:py-4 rounded-lg hover:bg-gray-300 transition-colors w-full sm:w-auto text-sm sm:text-base font-semibold touch-manipulation"
+            >
+              Retour
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="bg-teal-500 text-white px-4 py-3 sm:py-4 rounded-lg hover:bg-teal-600 transition-colors w-full sm:w-auto text-sm sm:text-base font-semibold disabled:opacity-60 touch-manipulation"
+            >
+              {isSubmitting ? 'Envoi en cours...' : 'Valider'}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

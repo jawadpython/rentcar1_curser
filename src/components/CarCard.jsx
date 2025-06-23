@@ -1,92 +1,94 @@
 import React from 'react';
 
-const CarCard = ({ car, onSelect }) => {
-  const getCategoryColor = (category) => {
-    const colors = {
-      sedan: 'bg-blue-100 text-blue-800',
-      suv: 'bg-green-100 text-green-800',
-      luxury: 'bg-purple-100 text-purple-800',
-      electric: 'bg-teal-100 text-teal-800',
-      sport: 'bg-red-100 text-red-800'
-    };
-    return colors[category] || 'bg-gray-100 text-gray-800';
+const FeatureIcon = ({ name, className }) => {
+  const iconMap = {
+    Automatique: (
+      <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0 0v5.5m0 0l-2-2m2 2l2-2" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 12h14" />
+      </svg>
+    ),
+    Passagers: (
+      <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
+        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zm-3 4a4 4 0 100 8 4 4 0 000-8zm6-1a1 1 0 11-2 0 1 1 0 012 0zM13 8a3 3 0 11-6 0 3 3 0 016 0zm-3 4a4 4 0 100 8 4 4 0 000-8zm6-3a1 1 0 100-2h-1a1 1 0 100 2h1z" />
+      </svg>
+    ),
+    GPS: (
+      <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+      </svg>
+    ),
+    'Car Play': (
+      <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M7 2a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zm3 14a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+      </svg>
+    ),
+    'Toit ouvrant': (
+      <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
+        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+      </svg>
+    ),
   };
+  return iconMap[name] || null;
+};
 
-  const getCategoryName = (category) => {
-    const names = {
-      sedan: 'Berline',
-      suv: 'SUV',
-      luxury: 'Luxe',
-      electric: 'Électrique',
-      sport: 'Sport'
-    };
-    return names[category] || category;
-  };
+const CarCard = ({ car, duration, onSelect }) => {
+  const totalPrice = car.price * duration;
 
   return (
-    <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-      {/* Image Container */}
-      <div className="relative overflow-hidden">
-        <img 
-          src={car.image} 
-          alt={car.name} 
-          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-        />
-        <div className="absolute top-3 left-3">
-          <span className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(car.category)}`}>
-            {getCategoryName(car.category)}
-          </span>
+    <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col justify-between transition-shadow hover:shadow-xl">
+      {/* Card Header */}
+      <div className="p-4">
+        <div className="flex justify-between items-start">
+          <h3 className="font-bold text-gray-800 text-lg">{car.name}</h3>
+          <button className="text-gray-400 hover:text-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </button>
         </div>
-        <div className="absolute top-3 right-3">
-          <span className="bg-black bg-opacity-50 text-white px-2 py-1 rounded-full text-xs font-medium">
-            {car.seats} places
-          </span>
+        {car.availability > 0 && (
+            <span className="text-sm bg-red-100 text-red-700 px-3 py-1 rounded-full mt-2 inline-block font-medium">
+            {car.availability} voiture disponible
+            </span>
+        )}
+      </div>
+
+      {/* Car Image */}
+      <img src={car.image} alt={car.name} className="w-full h-48 object-cover px-4"/>
+
+      {/* Features */}
+      <div className="p-4 mt-2">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm text-gray-700">
+            <div className="flex items-center gap-2">
+                <FeatureIcon name="Automatique" className="w-5 h-5 text-gray-500" />
+                <span>Automatique</span>
+            </div>
+            <div className="flex items-center gap-2">
+                <FeatureIcon name="Passagers" className="w-5 h-5 text-gray-500" />
+                <span>{car.seats} passagers</span>
+            </div>
+          {car.features.slice(1).map(feature => (
+            <div key={feature} className="flex items-center gap-2">
+              <FeatureIcon name={feature} className="w-5 h-5 text-gray-500" />
+              <span>{feature}</span>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Content */}
-      <div className="p-6">
-        <div className="flex justify-between items-start mb-3">
-          <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
-            {car.name}
-          </h3>
-          <div className="text-right">
-            <p className="text-2xl font-bold text-blue-600">{car.price}€</p>
-            <p className="text-sm text-gray-500">par jour</p>
-          </div>
+      {/* Footer Price/Action Bar */}
+      <div
+        onClick={() => onSelect(car)}
+        className="bg-black text-white p-4 flex justify-between items-center cursor-pointer mt-auto"
+      >
+        <div className="flex flex-col">
+          <span className="font-bold text-lg" style={{color: '#65d35a'}}>{car.price} MAD/jour</span>
+          <span className="text-sm text-gray-400">({totalPrice.toLocaleString('fr-FR')} MAD)</span>
         </div>
-
-        {/* Car Details */}
-        <div className="space-y-2 mb-4">
-          <div className="flex items-center text-sm text-gray-600">
-            <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
-            </svg>
-            {car.fuel}
-          </div>
-          
-          {/* Features */}
-          <div className="flex flex-wrap gap-1">
-            {car.features.slice(0, 2).map((feature, index) => (
-              <span key={index} className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
-                {feature}
-              </span>
-            ))}
-            {car.features.length > 2 && (
-              <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
-                +{car.features.length - 2} autres
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* Select Button */}
-        <button
-          onClick={() => onSelect(car)}
-          className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 transform hover:scale-105"
-        >
-          Sélectionner ce véhicule
-        </button>
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
       </div>
     </div>
   );
